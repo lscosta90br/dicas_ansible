@@ -1,0 +1,48 @@
+---
+directory_project: $HOME/projects3/myproject3
+
+## São diretorios extras do sistemas
+sub_directory_project:
+  - contrib  
+  - apps/core 
+  - apps/users
+
+# Nome do projeto django
+django_startproject: site_proj3
+
+# Nome das aplições que serão criadas no projeto.
+django_startapp:
+  - core
+  - users
+
+files_required:
+- src: README.md
+  dest: README.md
+- src: .gitignore
+  dest: .gitignore
+- src: contrib/env_gen.py
+  dest: contrib/env_gen.py
+# - src: requirements.txt
+#   dest: requirements.txt
+
+packages:
+  - python3-venv
+  - python3-pip
+  - curl
+
+poetry_pyprojects:
+  - name: MyProject
+    author: Seu usuario <seu_usuario@gmail.com>
+    description: My first project
+
+packages_python:
+  - django
+  - dj-database-url 
+  - django-widget-tweaks 
+  - python-decouple 
+  - django-extensions
+  - django-debug-toolbar
+
+packages_python_dev:
+  - black
+  - flake8

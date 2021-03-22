@@ -1,0 +1,77 @@
+- name: Configurando o hostname
+  hostname:
+    name: x-wing-01
+
+- name: Definir fuso horário para America/Sao_Paulo
+  community.general.timezone:
+    name: America/Sao_Paulo
+
+- name: set as default locale
+  command: localectl set-locale LANG=pt_BR.UTF-8 
+
+- name: set as default locale
+  command: localectl set-keymap br-abnt2
+
+- name: Removendo 127.0.1.1
+  lineinfile:
+    path: /etc/hosts
+    regexp: '127.0.1.1'
+    line: ''
+
+- name: Adiconado novo host to /etc/hosts
+  blockinfile:
+    path: /etc/hosts
+    block: |
+      {{ item.ip }} {{ item.name }}
+    marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+  loop:
+    - { name: x-wing-01.marvels.corp x-wing-01 , ip: 192.168.3.200 }
+
+
+
+
+
+
+
+# - name: Update /etc/hosts
+#   become: true
+#   blockinfile:
+#       path: /etc/hosts
+#       create: yes
+#       backup: yes
+#       block: |
+#         127.0.0.1 localhost
+#         127.0.1.1 wks-0001
+
+#         # The following lines are desirable for IPv6 capable hosts
+#         ::1     ip6-localhost ip6-loopback
+#         fe00::0 ip6-localnet
+#         ff00::0 ip6-mcastprefix
+#         ff02::1 ip6-allnodes
+#         ff02::2 ip6-allrouters
+
+# - name: Add mappings to /etc/hosts
+#   blockinfile:
+#     path: /etc/hosts
+#     block: |
+#       {{ item.ip }} {{ item.name }}
+#     marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item.name }}"
+#   loop:
+#     - { name: wks-0001.marvels.corp wks-001 , ip: 192.168.3.217 }
+    
+# - name: Insert/Update /etc/hosts
+#   become: true
+#   blockinfile:
+#     dest: /etc/hosts
+#     block: |
+#       127.0.0.1 localhost
+#       127.0.1.1 wks-0001
+
+#       # The following lines are desirable for IPv6 capable hosts
+#       ::1     ip6-localhost ip6-loopback
+#       fe00::0 ip6-localnet
+#       ff00::0 ip6-mcastprefix
+#       ff02::1 ip6-allnodes
+#       ff02::2 ip6-allrouters
+
+

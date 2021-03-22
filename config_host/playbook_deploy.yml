@@ -1,0 +1,3 @@
+---
+- import_playbook: configure.yml
+# - import_playbook: pacotes.yml

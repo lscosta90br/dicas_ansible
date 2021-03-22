@@ -1,0 +1,116 @@
+---
+- name: Faz uma copia do arquivos settings.py => settings.py.default
+  ansible.builtin.copy:
+    src: "{{ directory_project }}/{{ django_startproject }}/{{ item.src }}"
+    dest: "{{ directory_project }}/{{ django_startproject }}/{{ item.dest }}"
+    remote_src: yes
+    backup: yes
+  loop:
+    - { src: settings.py, dest: settings.py.default }
+    - { src: urls.py, dest: urls.py.default }
+    
+
+- name: Remove todas as linhas do database
+  ansible.builtin.command: sed -i '76,81d' "{{ directory_project }}/{{ django_startproject }}/settings.py"
+
+- name: Insert libs no arquivos settings.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/settings.py"
+    marker: "### {mark} ANSIBLE MANAGED BLOCK - add libs"
+    insertafter: "from pathlib import Path"
+    block: |
+      from decouple import config, Csv
+      from dj_database_url import parse as dburl
+
+- name: Insert INSTALLED_APPS settings.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/settings.py"
+    marker: "### {mark} - add apps "
+    insertafter: "'django.contrib.staticfiles',"
+    block: |2
+          'django_extensions',
+          'debug_toolbar',
+          'apps.core',
+          'apps.users',
+
+- name: Insert MIDDLEWARE settings.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/settings.py"
+    marker: "### {mark} - add MIDDLEWARE "
+    insertafter: "'django.middleware.clickjacking.XFrameOptionsMiddleware',"
+    block: |2
+          'debug_toolbar.middleware.DebugToolbarMiddleware',
+
+
+- name: Update chaves
+  lineinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/settings.py"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  loop:
+    - {regexp: '^SECRET_KEY\s=', line: SECRET_KEY = config('SECRET_KEY')}
+    - {regexp: '^DEBUG\s=', line: "DEBUG = config('DEBUG', default=False, cast=bool)"}
+    - {regexp: '^ALLOWED_HOSTS\s=', line: "ALLOWED_HOSTS = config('ALLOWED_HOSTS', default=[], cast=Csv())"}
+    - {regexp: '^LANGUAGE_CODE\s=' , line: "LANGUAGE_CODE = 'pt-br'"}
+    - {regexp: '^TIME_ZONE\s=' , line: "TIME_ZONE = 'America/Sao_Paulo'"}
+
+- name: Before DATABASE settings.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/settings.py"
+    marker: "### {mark} - database_dburl"
+    insertafter: "# https://docs.djangoproject.com/en/3.1/ref/settings/#databases"
+    block: |2
+      default_dburl = 'sqlite:///' + str(BASE_DIR / "db.sqlite3")
+      DATABASES = {
+          'default': config('DATABASE_URL', default=default_dburl, cast=dburl),
+      }
+
+
+- name: Insert Final do arquivo settings.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/settings.py"
+    marker: "### {mark} - include final arquivo "
+    insertafter: "STATIC_URL = '/static/'"
+    block: |2
+      STATIC_ROOT = (BASE_DIR / 'staticfiles')
+
+      INTERNAL_IPS = [
+          # ...
+          "127.0.0.1",
+          # ...
+      ]
+      # SHELL_PLUS_PRINT_SQL = True
+
+- name: Update chaves urls.py
+  lineinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/urls.py"
+    regexp: '^from\sdjango\.urls\simport\spath'
+    line: "from django.urls import path, include"
+
+- name: Insert libs no arquivos urls.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/urls.py"
+    marker: "### {mark} ANSIBLE MANAGED BLOCK - add libs"
+    insertafter: "from django.urls import path"
+    block: |
+      from apps.core import views
+      from django.conf import settings
+
+- name: Insert Final do arquivo urls.py
+  blockinfile:
+    path: "{{ directory_project }}/{{ django_startproject }}/urls.py"
+    marker: "### {mark} - include final arquivo url.py"
+    insertafter: "]"
+    block: |2
+
+      if settings.DEBUG:
+          import debug_toolbar
+          urlpatterns = [
+              path('__debug__/', include(debug_toolbar.urls)),
+
+            # For django versions before 2.0:
+            # url(r'^__debug__/', include(debug_toolbar.urls)),
+
+          ] + urlpatterns
+
+

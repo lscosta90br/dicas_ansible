@@ -1,0 +1,5 @@
+django==2.2.19 
+dj-database-url 
+django-widget-tweaks 
+python-decouple 
+django-extensions

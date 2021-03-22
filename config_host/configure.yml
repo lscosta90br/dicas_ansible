@@ -1,0 +1,6 @@
+- name: Configurando nova maquina 
+  hosts: servers
+  become: yes
+  roles:
+    - configure
+    # - chrome

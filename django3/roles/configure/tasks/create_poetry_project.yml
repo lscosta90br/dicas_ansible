@@ -1,0 +1,28 @@
+---
+- name: Instalado o projeto poetry - pyproject.toml
+  ansible.builtin.command: $HOME/.poetry/bin/poetry init 
+                              --name "{{ item.name }}" 
+                              --author "{{ item.author }}"
+                              --description "{{ item.description }}"
+                              -n
+  args:
+    chdir: "{{ directory_project }}/"
+    creates: "{{ directory_project }}/pyproject.toml"
+  loop: "{{ poetry_pyprojects }}"
+    
+    
+
+- name: Adicionado pacotes no poetry 
+  ansible.builtin.command: $HOME/.poetry/bin/poetry add {{ item }}
+  args:
+    chdir: "{{ directory_project }}/"
+  loop: "{{ packages_python }}"
+
+
+- name: Adicionado pacotes no poetry dev
+  ansible.builtin.command: $HOME/.poetry/bin/poetry add {{ item }} --dev
+  args:
+    chdir: "{{ directory_project }}/"
+  loop: "{{ packages_python_dev }}"
+
+#### FIM Instalação do Projeto POETRY

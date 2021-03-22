@@ -1,0 +1,6 @@
+---
+- name: Implantando coisas para django
+  hosts: wks_all
+  become: no
+  roles:
+    - configure

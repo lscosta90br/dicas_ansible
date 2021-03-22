@@ -1,0 +1,15 @@
+---
+- name: Cria o usuario rdp e adiciona os grupos adm,sudo,dialout
+  become: yes
+  user: 
+    name: rdo
+    password: '$6$5pEjdN5uH//p0b.g$x9spI96QmKe1l8gRRSWC7vJb5i5Ci7I2BcS6wbUqYJqjIcRvgWuGp3T0JjX1eGqhDc44uAvlIk/dqNMQBj7b30'
+    uid: 900
+    groups: 
+      - adm
+      - sudo
+    state: present
+    shell: /bin/bash          # Defaults to /bin/bash
+    system: no                # Defaults to no
+    createhome: yes           # Defaults to yes
+    home: /home/rdo  # Defaults to /home/<username>

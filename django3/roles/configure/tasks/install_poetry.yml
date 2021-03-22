@@ -1,0 +1,17 @@
+---
+#### Instalação do POETRY
+- name: Download get-poetry.py
+  get_url:
+    url: https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py
+    dest: /tmp/
+
+- name: Instalado o poetry
+  ansible.builtin.command: /usr/bin/python3 /tmp/get-poetry.py -y 
+  args:
+    creates: $HOME/.poetry/bin/poetry
+
+- name: Removendo o arquivo get-poetry.py
+  file: 
+    path: /tmp/get-poetry.py
+    state: absent
+#### FIM Instalação do POETRY

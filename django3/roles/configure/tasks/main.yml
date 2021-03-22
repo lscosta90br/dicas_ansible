@@ -1,0 +1,8 @@
+---
+- include_tasks: remove_projeto.yml
+- include_tasks: base.yml
+- include_tasks: install_poetry.yml
+- include_tasks: create_poetry_project.yml
+- include_tasks: create_django_environment.yml
+- include_tasks: change_settings.yml
+# - include_tasks: create_user_rdo.yml

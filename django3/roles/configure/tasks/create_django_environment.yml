@@ -1,0 +1,22 @@
+---
+#### Gerando ambiente aplicação django
+- name: Gerando arquivo de configuração .env
+  ansible.builtin.command: /usr/bin/python3 {{ directory_project }}/contrib/env_gen.py
+  args:
+    chdir: "{{ directory_project }}/"
+
+- name: Criando a projeto django "{{ django_startproject }}"
+  ansible.builtin.command: $HOME/.poetry/bin/poetry run 
+                              django-admin.py startproject "{{ django_startproject }}" .
+  args:
+    chdir: "{{ directory_project }}/" 
+    creates: "{{ directory_project }}/{{ django_startproject }}"
+
+- name: Adicionado as startapp ao projeto
+  ansible.builtin.command: $HOME/.poetry/bin/poetry run python3 
+                                          manage.py startapp "{{ item }}" "apps/{{ item }}" 
+  args:
+    chdir: "{{ directory_project }}/"
+    creates: "{{ directory_project }}/apps/{{ item }}/migrations"
+  loop: "{{ django_startapp }}"
+#### FIM Gerando aplicação django

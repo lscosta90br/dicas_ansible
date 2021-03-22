@@ -1,0 +1,29 @@
+---
+- name: Add specified repository into sources list using specified filename
+  apt_repository:
+    repo: "{{ item.repo }}"
+    state: present
+    filename: "{{ item.file }}"
+    update_cache: no
+  with_items:
+    - "{{ repositorios }}"
+
+- name: Adiciona chave do repositorio
+  apt_key:
+    url: "{{ item.url_key }}"
+    state: present
+  with_items:
+    - "{{ repositorios }}"
+
+- name: Update dos pacotes apt
+  apt: update_cache=yes force_apt_get=yes cache_valid_time=3600
+
+- name: Upgrade todos os pacotes apt
+  apt: upgrade=dist force_apt_get=yes
+
+- name: Instalando pacotes no servidor!
+  package:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ pacotes }}"

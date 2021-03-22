@@ -1,0 +1,5 @@
+---
+- name: Remove directory
+  file:
+    path: "{{ directory_project }}"
+    state: absent

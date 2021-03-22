@@ -1,0 +1,54 @@
+---
+repositorios:
+  # - repo: deb [arch=amd64] https://brave-browser-apt-release.s3.brave.com/ stable main
+  #   file: brave-browser-release
+  #   url_key: https://brave-browser-apt-release.s3.brave.com/brave-core.asc
+  # - repo: deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main
+  #   file: google-chrome
+  #   url_key: https://dl.google.com/linux/linux_signing_key.pub
+  # - repo: deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main
+  #   file: vscode
+  #   url_key: https://packages.microsoft.com/keys/microsoft.asc 
+  # - repo: deb [arch=amd64] https://download.virtualbox.org/virtualbox/debian focal contrib
+  #   file: virtualbox
+  #   url_key: https://www.virtualbox.org/download/oracle_vbox_2016.asc 
+  - repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+    file: docker
+    url_key:  https://download.docker.com/linux/ubuntu/gpg
+  # - repo: deb http://linux.teamviewer.com/deb stable main
+  #   file: teamviewer
+  #   url_key: https://download.teamviewer.com/download/linux/signature/TeamViewer2017.asc
+
+pacotes: 
+  - systemd #localectl
+  # - language-pack-br-base
+  # - language-pack-br
+  # - apt-transport-https 
+  # - bashtop
+  # - brave-browser
+  # - code
+  # - curl
+  # - dbeaver-ce
+  # - gnome-twitch
+  # - google-chrome-stable
+  # - guvcview
+  # - htop
+  # - httpie
+  # - neovim
+  # - nmapsi4 #nmap com gui
+  # - piper
+  # - python3-apt
+  # - telegram-desktop
+  # - tilix
+  # - virtualbox-6.1
+  # - wireshark
+  # - zeal
+  # - zsh
+  # - zsh-doc
+  # - powerline 
+  # - fonts-powerline 
+  # - zsh-theme-powerlevel9k
+  # - vim-scripts
+  # - python-apt 
+  # - teamviewer
+  # - mssql-server

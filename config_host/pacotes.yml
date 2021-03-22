@@ -1,0 +1,7 @@
+---
+- name: Implantando pacotes 
+  hosts: servers
+  become: yes
+  roles:
+    - pacotes
+

@@ -1,0 +1,32 @@
+---
+- name: Criando os diretórios para o projeto
+  file:
+    path: "{{ directory_project }}/{{ item }}"
+    state: directory
+  register: file_output
+  loop: "{{sub_directory_project}}"
+
+# - name: Criando os diretórios para o projeto
+#   ansible.builtin.file:
+#     path: "/home/rdo/{{ item }}"
+#     state: directory
+#   loop:
+#     - projects3
+
+- name: Copiando arquivos necessarios
+  ansible.builtin.template:
+    src: "files/{{ item.src }}"
+    dest: "{{ directory_project }}/{{ item.dest }}"
+  loop: "{{ files_required }}"
+
+- name: Instalado pacotes necessários 
+  become: true
+  ansible.builtin.package:
+    name: "{{packages}}"
+    state: latest
+
+
+
+
+
+
